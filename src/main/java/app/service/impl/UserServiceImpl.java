@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
         var collect = repository.findAll().stream()
                 .map(this::mapFromEntityToDto)
                 .collect(Collectors.toList());
-        log.info("LOG: {}", collect);
         return collect;
     }
 
@@ -58,11 +57,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDto deleteUser(UserRequestData userRequestData) {
         boolean status = true;
         var user = repository.findByPhone(userRequestData.getPhone());
-        try {
-            repository.delete(user);
-        } catch (Exception exception) {
-            status = false;
-        }
+        repository.delete(user);
         return getResponse(status, user.getId(), OPERATION_DELETE);
     }
 
@@ -87,12 +82,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean save(UserEntity userEntity) {
-        try {
-            repository.save(userEntity);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
+        repository.save(userEntity);
+        return true;
     }
 
     private UserEntity getEntity(UserDto user) {
